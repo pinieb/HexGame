@@ -89,6 +89,10 @@ namespace HexGame
         {
             switch (mode)
             {
+                case CellHighlightMode.Selected:
+                    this.HighlightCell(Color.cyan);
+                    break;
+
                 case CellHighlightMode.Move:
                     this.HighlightCell(Color.green);
                     break;

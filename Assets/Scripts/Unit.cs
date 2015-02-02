@@ -7,6 +7,7 @@
 
 namespace HexGame
 {
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using UnityEngine;
 
@@ -107,6 +108,15 @@ namespace HexGame
         }
 
         /// <summary>
+        /// Gets or sets the owner of the unit
+        /// </summary>
+        public PlayerController Owner
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Returns whether the unit can move to the given coordinate
         /// </summary>
         /// <param name="coord">Coordinate to check</param>
@@ -128,7 +138,8 @@ namespace HexGame
         /// <returns>Whether or not the unit can be attacked</returns>
         public virtual bool CanAttack(Unit unit)
         {
-            if (unit != null && unit != this && HexDistance.Distance(this.Coordinate, unit.Coordinate) <= this.AttackRange)
+            if (unit != null && unit != this && unit.Owner != this.Owner &&
+                HexDistance.Distance(this.Coordinate, unit.Coordinate) <= this.AttackRange)
             {
                 return true;
             }
@@ -154,7 +165,9 @@ namespace HexGame
         public void Select()
         {
             this.selected = true;
-            this.renderer.material.shader = Shader.Find("Outlined/Silhouetted Diffuse");
+            this.MapController.HighlightCells(new List<CellCoordinate>() { this.Coordinate }, CellHighlightMode.Selected);
+            
+            // this.renderer.material.shader = Shader.Find("Outlined/Silhouetted Diffuse");
         }
 
         /// <summary>

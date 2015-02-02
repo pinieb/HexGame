@@ -13,6 +13,11 @@ namespace HexGame
     public enum CellHighlightMode
     {
         /// <summary>
+        /// Highlight mode for selected cell
+        /// </summary>
+        Selected,
+
+        /// <summary>
         /// Highlight mode for movement
         /// </summary>
         Move,

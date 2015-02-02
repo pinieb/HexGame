@@ -279,15 +279,15 @@ namespace HexGame
         /// <param name="cell">Cell to select</param>
         public void ProcessSelection(CellController cell)
         {
+            if (this.IsOccupied(cell.Coordinate))
+            {
+                var unit = this.GetUnit(cell);
+                this.ProcessSelection(unit);
+                return;
+            }
+            
             if (this.selection != null)
             {
-                if (this.IsOccupied(cell.Coordinate))
-                {
-                    var unit = this.GetUnit(cell);
-                    this.ProcessSelection(unit);
-                    return;
-                }
-
                 this.Move(this.selection.Coordinate, cell.Coordinate);
             }
 
@@ -328,6 +328,26 @@ namespace HexGame
                     cell.HighlightCellForMode(mode);
                 }
             }
+        }
+
+        /// <summary>
+        /// Highlights a list of cells
+        /// </summary>
+        /// <param name="list">List of coordinates</param>
+        /// <param name="mode">Cell highlight mode</param>
+        public void HighlightCells(IList<CellCoordinate> list, CellHighlightMode mode)
+        {
+            List<CellController> cells = new List<CellController>();
+            foreach (CellCoordinate c in list)
+            {
+                CellController cell = this.GetCell(c);
+                if (cell != null)
+                {
+                    cells.Add(cell);
+                }
+            }
+
+            this.HighlightCells(cells, mode);
         }
 
         /// <summary>
@@ -387,6 +407,26 @@ namespace HexGame
         private CellController GetCell(int x, int y)
         {
             return this.Cells[x + this.GridSize, y + this.GridSize];
+        }
+
+        /// <summary>
+        /// Assigns a cell controller to a certain coordinate
+        /// </summary>
+        /// <param name="coord">Cell coordinate</param>
+        /// <param name="cell">Cell to assign</param>
+        private void SetCell(CellCoordinate coord, CellController cell)
+        {
+            this.SetCell(coord.X, coord.Y, cell);
+        }
+
+        /// <summary>
+        /// Gets the cell controller from the given coordinate
+        /// </summary>
+        /// <param name="coord">Cell coordinate</param>
+        /// <returns>Cell controller for the coordinate</returns>
+        private CellController GetCell(CellCoordinate coord)
+        {
+            return this.GetCell(coord.X, coord.Y);
         }
 
         /// <summary>
