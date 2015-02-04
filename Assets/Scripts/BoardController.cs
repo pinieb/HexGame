@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="MapController.cs" company="Pete Biencourt">
+// <copyright file="BoardController.cs" company="Pete Biencourt">
 //     Copyright (c) Pete Biencourt. All rights reserved.
 // </copyright>
 // <author>Pete Biencourt</author>
@@ -14,9 +14,9 @@ namespace HexGame
     using UnityEngine;
 
     /// <summary>
-    /// Map controller
+    /// Board controller
     /// </summary>
-    public class MapController : MonoBehaviour
+    public class BoardController : MonoBehaviour
     {
         /// <summary>
         /// Hex prefab
@@ -73,6 +73,11 @@ namespace HexGame
         /// Cells list
         /// </summary>
         private CellController[,] cells;
+
+        /// <summary>
+        /// Turn controller
+        /// </summary>
+        private TurnController turnController;
 
         /// <summary>
         /// Gets Z Scale
@@ -137,7 +142,7 @@ namespace HexGame
         }
 
         /// <summary>
-        /// Initialize the map controller
+        /// Initialize the board controller
         /// </summary>
         public void Start()
         {
@@ -146,6 +151,8 @@ namespace HexGame
             this.Players[0].Color = Color.red;
             this.Players.Add(new PlayerController(1));
             this.Players[1].Color = Color.cyan;
+
+            this.turnController = new TurnController(this.Players);
 
             this.Cells = new CellController[(this.GridSize * 2) + 1, (this.GridSize * 2) + 1];
             this.Units = new Unit[(this.GridSize * 2) + 1, (this.GridSize * 2) + 1];
@@ -169,7 +176,7 @@ namespace HexGame
                         hex.gameObject.name = "(" + cellCoord.X + ", " + cellCoord.Y + ")";
                         this.SetCell(cellCoord.X, cellCoord.Y, hex);
                         CellController cellController = hex.GetComponent<CellController>();
-                        cellController.MapController = this;
+                        cellController.BoardController = this;
                         cellController.Coordinate = cellCoord;
                     }
                 }
@@ -244,7 +251,7 @@ namespace HexGame
                 Vector3 cellLoc = cell.transform.position;
                 var unit = (Unit)Instantiate(prefab);
                 unit.transform.position = new Vector3(cellLoc.x, this.UnitHeight, cellLoc.z);
-                unit.MapController = this;
+                unit.BoardController = this;
                 unit.Coordinate = coord;
                 unit.Mesh.renderer.material.color = owner.Color;
                 this.SetUnit(coord.X, coord.Y, unit);
@@ -260,16 +267,19 @@ namespace HexGame
         {
             if (unit != null)
             {
-                if (this.selection == null)
+                if (this.selection == null && this.turnController.TurnToPlay == unit.Owner)
                 {
                     this.selection = unit;
                     unit.Select();
 
                     var cellList = this.GetCellsAsList();
 
-                    // highlight possible moves
-                    List<CellController> cellsToHighlightForMove = cellList.Where(cell => unit.CanMove(cell.Coordinate)).ToList();
-                    this.HighlightCells(cellsToHighlightForMove, CellHighlightMode.Move);
+                    // if the unit can still move, highlight the possible moves
+                    if (this.turnController.UnitMoved == null)
+                    {
+                        List<CellController> cellsToHighlightForMove = cellList.Where(cell => unit.CanMove(cell.Coordinate)).ToList();
+                        this.HighlightCells(cellsToHighlightForMove, CellHighlightMode.Move);
+                    }
 
                     // highlight possible attacks
                     List<CellController> cellsToHighlightForAttack = cellList.Where(cell => unit.CanAttack(this.GetUnit(cell))).ToList();
@@ -277,7 +287,10 @@ namespace HexGame
                 }
                 else if (this.selection != null && this.selection != unit)
                 {
-                    this.selection.ActOn(unit);
+                    if (this.selection.ActOn(unit))
+                    {
+                        this.turnController.HandleUnitAction();
+                    }
 
                     // in case it just died
                     if (unit != null)
@@ -289,7 +302,11 @@ namespace HexGame
                 }
                 else
                 {
-                    this.CancelSelection();
+                    // Only allow selection cancelling if a unit hasn't already moved
+                    if (this.turnController.UnitMoved == null)
+                    {
+                        this.CancelSelection();
+                    }
                 }
             }
         }
@@ -307,12 +324,16 @@ namespace HexGame
                 return;
             }
             
-            if (this.selection != null)
+            if (this.selection != null && this.turnController.UnitMoved == null)
             {
                 this.Move(this.selection.Coordinate, cell.Coordinate);
+                this.turnController.HandleUnitMove(this.selection);
+                var temp = this.selection;
+                this.CancelSelection();
+                this.ProcessSelection(temp);
             }
 
-            this.CancelSelection();
+            //this.CancelSelection();
         }
 
         /// <summary>

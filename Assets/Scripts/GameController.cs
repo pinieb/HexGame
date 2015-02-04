@@ -16,10 +16,10 @@ namespace HexGame
     public class GameController : MonoBehaviour
     {
         /// <summary>
-        /// Map controller
+        /// Board controller
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
-        public MapController MapController;
+        public BoardController BoardController;
 
         /// <summary>
         /// Start the controller

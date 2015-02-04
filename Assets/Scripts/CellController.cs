@@ -25,10 +25,10 @@ namespace HexGame
         public GameObject HexMesh;
 
         /// <summary>
-        /// Map controller
+        /// Board controller
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
-        public MapController MapController;
+        public BoardController BoardController;
 
         /// <summary>
         /// Coordinate for the cell
@@ -41,7 +41,7 @@ namespace HexGame
         /// </summary>
         public void OnMouseDown()
         {
-            this.MapController.ProcessSelection(this);
+            this.BoardController.ProcessSelection(this);
         }
 
         /// <summary>
@@ -51,11 +51,11 @@ namespace HexGame
         public List<CellCoordinate> GetNeighbors()
         {
             List<CellCoordinate> list = new List<CellCoordinate>();
-            for (int i = -1 * this.MapController.GridSize; i <= this.MapController.GridSize; i++)
+            for (int i = -1 * this.BoardController.GridSize; i <= this.BoardController.GridSize; i++)
             {
-                for (int j = -1 * this.MapController.GridSize; j <= this.MapController.GridSize; j++)
+                for (int j = -1 * this.BoardController.GridSize; j <= this.BoardController.GridSize; j++)
                 {
-                    if (HexDistance.Distance(0, 0, i, j) <= this.MapController.GridSize
+                    if (HexDistance.Distance(0, 0, i, j) <= this.BoardController.GridSize
                         && HexDistance.Distance(this.Coordinate.X, this.Coordinate.Y, i, j) == 1)
                     {
                         list.Add(new CellCoordinate(i, j));
@@ -71,7 +71,7 @@ namespace HexGame
         /// </summary>
         public void Select()
         {
-            this.MapController.ProcessSelection(this);
+            this.BoardController.ProcessSelection(this);
         }
 
         /// <summary>

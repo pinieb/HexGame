@@ -17,10 +17,10 @@ namespace HexGame
     public class Unit : MonoBehaviour, ISelectable
     {
         /// <summary>
-        /// Map controller
+        /// Board controller
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
-        public MapController MapController;
+        public BoardController BoardController;
 
         /// <summary>
         /// Max move range
@@ -129,7 +129,7 @@ namespace HexGame
         /// <returns>Whether or not the unit can move to the coordinate</returns>
         public virtual bool CanMove(CellCoordinate coord)
         {
-            if (HexDistance.Distance(this.Coordinate, coord) <= this.MaxMoveRange && !this.MapController.IsOccupied(coord))
+            if (HexDistance.Distance(this.Coordinate, coord) <= this.MaxMoveRange && !this.BoardController.IsOccupied(coord))
             {
                 return true;
             }
@@ -157,12 +157,16 @@ namespace HexGame
         /// Performs an action on another unit
         /// </summary>
         /// <param name="unit">Unit to act on</param>
-        public virtual void ActOn(Unit unit)
+        /// <returns>Whether or not the action was successful</returns>
+        public virtual bool ActOn(Unit unit)
         {
             if (this.CanAttack(unit))
             {
                 this.Attack(unit);
+                return true;
             }
+
+            return false;
         }
 
         /// <summary>
@@ -171,7 +175,7 @@ namespace HexGame
         public void Select()
         {
             this.selected = true;
-            this.MapController.HighlightCells(new List<CellCoordinate>() { this.Coordinate }, CellHighlightMode.Selected);
+            this.BoardController.HighlightCells(new List<CellCoordinate>() { this.Coordinate }, CellHighlightMode.Selected);
             
             // this.renderer.material.shader = Shader.Find("Outlined/Silhouetted Diffuse");
         }
@@ -211,11 +215,11 @@ namespace HexGame
         {
             if (!this.selected)
             {
-                this.MapController.ProcessSelection(this);
+                this.BoardController.ProcessSelection(this);
             }
             else
             {
-                this.MapController.ProcessSelection(this);
+                this.BoardController.ProcessSelection(this);
             }
         }
 
