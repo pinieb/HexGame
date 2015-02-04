@@ -1,7 +1,5 @@
 ﻿/*
  * TODO
- * add player objects to scene
- * add player colors
  * add turn manager
  * add turn indicator
  * add two more classes

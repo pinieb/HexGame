@@ -86,6 +86,15 @@ namespace HexGame
         }
 
         /// <summary>
+        /// Gets or sets the players list
+        /// </summary>
+        public List<PlayerController> Players
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Gets or sets the cells list
         /// </summary>
         private CellController[,] Cells
@@ -125,15 +134,6 @@ namespace HexGame
             {
                 this.units = value;
             }
-        }
-
-        /// <summary>
-        /// Players
-        /// </summary>
-        public List<PlayerController> Players
-        {
-            get;
-            set;
         }
 
         /// <summary>
@@ -224,9 +224,8 @@ namespace HexGame
         /// <param name="unitType">Type of unit to spawn</param>
         /// <param name="coord">Location to spawn it</param>
         /// <param name="owner">Owner of the unit</param>
-        public Unit SpawnUnit(UnitType unitType, CellCoordinate coord, PlayerController owner)
+        public void SpawnUnit(UnitType unitType, CellCoordinate coord, PlayerController owner)
         {
-            Unit unit = null;
             Unit prefab;
             switch (unitType)
             {
@@ -243,7 +242,7 @@ namespace HexGame
             if (prefab != null && cell != null && !this.IsOccupied(coord))
             {
                 Vector3 cellLoc = cell.transform.position;
-                unit = (Unit)Instantiate(prefab);
+                var unit = (Unit)Instantiate(prefab);
                 unit.transform.position = new Vector3(cellLoc.x, this.UnitHeight, cellLoc.z);
                 unit.MapController = this;
                 unit.Coordinate = coord;
@@ -251,8 +250,6 @@ namespace HexGame
                 this.SetUnit(coord.X, coord.Y, unit);
                 owner.AddUnit(unit);
             }
-
-            return unit;
         }
 
         /// <summary>
