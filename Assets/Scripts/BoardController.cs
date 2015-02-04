@@ -55,6 +55,12 @@ namespace HexGame
         public float UnitHeight = 0f;
 
         /// <summary>
+        /// Turn controller
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public TurnController TurnController;
+
+        /// <summary>
         /// Unit list
         /// </summary>
         private Unit[,] units;
@@ -75,11 +81,6 @@ namespace HexGame
         private CellController[,] cells;
 
         /// <summary>
-        /// Turn controller
-        /// </summary>
-        private TurnController turnController;
-
-        /// <summary>
         /// Gets Z Scale
         /// </summary>
         public float ZScale
@@ -88,15 +89,6 @@ namespace HexGame
             {
                 return (float)(this.XScale * Math.Cos(Math.PI / 6.0));
             }
-        }
-
-        /// <summary>
-        /// Gets or sets the players list
-        /// </summary>
-        public List<PlayerController> Players
-        {
-            get;
-            set;
         }
 
         /// <summary>
@@ -146,14 +138,6 @@ namespace HexGame
         /// </summary>
         public void Start()
         {
-            this.Players = new List<PlayerController>();
-            this.Players.Add(new PlayerController(0));
-            this.Players[0].Color = Color.red;
-            this.Players.Add(new PlayerController(1));
-            this.Players[1].Color = Color.cyan;
-
-            this.turnController = new TurnController(this.Players);
-
             this.Cells = new CellController[(this.GridSize * 2) + 1, (this.GridSize * 2) + 1];
             this.Units = new Unit[(this.GridSize * 2) + 1, (this.GridSize * 2) + 1];
 
@@ -181,15 +165,6 @@ namespace HexGame
                     }
                 }
             }
-
-            var spawnCoord = new CellCoordinate(1, 2);
-            this.SpawnUnit(UnitType.Cube, spawnCoord, this.Players[0]);
-
-            spawnCoord = new CellCoordinate(1, 3);
-            this.SpawnUnit(UnitType.Cube, spawnCoord, this.Players[0]);
-
-            spawnCoord = new CellCoordinate(2, 2);
-            this.SpawnUnit(UnitType.Cube, spawnCoord, this.Players[1]);
         }
 
         /// <summary>
@@ -267,7 +242,7 @@ namespace HexGame
         {
             if (unit != null)
             {
-                if (this.selection == null && this.turnController.TurnToPlay == unit.Owner)
+                if (this.selection == null && this.TurnController.TurnToPlay == unit.Owner)
                 {
                     this.selection = unit;
                     unit.Select();
@@ -275,7 +250,7 @@ namespace HexGame
                     var cellList = this.GetCellsAsList();
 
                     // if the unit can still move, highlight the possible moves
-                    if (this.turnController.UnitMoved == null)
+                    if (this.TurnController.UnitMoved == null)
                     {
                         List<CellController> cellsToHighlightForMove = cellList.Where(cell => unit.CanMove(cell.Coordinate)).ToList();
                         this.HighlightCells(cellsToHighlightForMove, CellHighlightMode.Move);
@@ -289,7 +264,7 @@ namespace HexGame
                 {
                     if (this.selection.ActOn(unit))
                     {
-                        this.turnController.HandleUnitAction();
+                        this.TurnController.HandleUnitAction();
                     }
 
                     // in case it just died
@@ -303,7 +278,7 @@ namespace HexGame
                 else
                 {
                     // Only allow selection cancelling if a unit hasn't already moved
-                    if (this.turnController.UnitMoved == null)
+                    if (this.TurnController.UnitMoved == null)
                     {
                         this.CancelSelection();
                     }
@@ -324,16 +299,15 @@ namespace HexGame
                 return;
             }
             
-            if (this.selection != null && this.turnController.UnitMoved == null)
+            if (this.selection != null && this.TurnController.UnitMoved == null)
             {
                 this.Move(this.selection.Coordinate, cell.Coordinate);
-                this.turnController.HandleUnitMove(this.selection);
+                this.TurnController.HandleUnitMove(this.selection);
                 var temp = this.selection;
                 this.CancelSelection();
                 this.ProcessSelection(temp);
             }
-
-            //this.CancelSelection();
+            ////this.CancelSelection();
         }
 
         /// <summary>

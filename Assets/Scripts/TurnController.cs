@@ -8,11 +8,12 @@
 namespace HexGame
 {
     using System.Collections.Generic;
+    using UnityEngine;
 
     /// <summary>
     /// Turn controller
     /// </summary>
-    public class TurnController
+    public class TurnController : MonoBehaviour
     {
         /// <summary>
         /// List of players
@@ -22,16 +23,7 @@ namespace HexGame
         /// <summary>
         /// Turn index
         /// </summary>
-        private int turnIndex = 0;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TurnController"/> class
-        /// </summary>
-        /// <param name="players">List of players, in order of turn</param>
-        public TurnController(IList<PlayerController> players)
-        {
-            this.players = new List<PlayerController>(players);
-        }
+        private int turnIndex = -1;
 
         /// <summary>
         /// Gets whose turn it is to play
@@ -53,7 +45,6 @@ namespace HexGame
             private set;
         }
 
-
         /// <summary>
         /// Gets the unit that moved this turn (if any)
         /// </summary>
@@ -61,6 +52,16 @@ namespace HexGame
         {
             get;
             private set;
+        }
+
+        /// <summary>
+        /// Initializes the turn controller
+        /// </summary>
+        /// <param name="players">List of players, in order of turn</param>
+        public void Initialize(IList<PlayerController> players)
+        {
+            this.players = new List<PlayerController>(players);
+            this.turnIndex = 0;
         }
 
         /// <summary>
