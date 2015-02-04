@@ -8,6 +8,8 @@
 namespace HexGame
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using UnityEngine;
 
     /// <summary>
     /// Player controller
@@ -23,6 +25,12 @@ namespace HexGame
         /// List of the units the player owns
         /// </summary>
         private List<Unit> units;
+
+        /// <summary>
+        /// Player's color
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public Color Color;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerController"/> class

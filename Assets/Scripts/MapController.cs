@@ -128,10 +128,25 @@ namespace HexGame
         }
 
         /// <summary>
+        /// Players
+        /// </summary>
+        public List<PlayerController> Players
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Initialize the map controller
         /// </summary>
         public void Start()
         {
+            this.Players = new List<PlayerController>();
+            this.Players.Add(new PlayerController(0));
+            this.Players[0].Color = Color.red;
+            this.Players.Add(new PlayerController(1));
+            this.Players[1].Color = Color.cyan;
+
             this.Cells = new CellController[(this.GridSize * 2) + 1, (this.GridSize * 2) + 1];
             this.Units = new Unit[(this.GridSize * 2) + 1, (this.GridSize * 2) + 1];
 
@@ -161,10 +176,13 @@ namespace HexGame
             }
 
             var spawnCoord = new CellCoordinate(1, 2);
-            this.SpawnUnit(UnitType.Cube, spawnCoord);
+            this.SpawnUnit(UnitType.Cube, spawnCoord, this.Players[0]);
+
+            spawnCoord = new CellCoordinate(1, 3);
+            this.SpawnUnit(UnitType.Cube, spawnCoord, this.Players[0]);
 
             spawnCoord = new CellCoordinate(2, 2);
-            this.SpawnUnit(UnitType.Cube, spawnCoord);
+            this.SpawnUnit(UnitType.Cube, spawnCoord, this.Players[1]);
         }
 
         /// <summary>
@@ -205,8 +223,10 @@ namespace HexGame
         /// </summary>
         /// <param name="unitType">Type of unit to spawn</param>
         /// <param name="coord">Location to spawn it</param>
-        public void SpawnUnit(UnitType unitType, CellCoordinate coord)
+        /// <param name="owner">Owner of the unit</param>
+        public Unit SpawnUnit(UnitType unitType, CellCoordinate coord, PlayerController owner)
         {
+            Unit unit = null;
             Unit prefab;
             switch (unitType)
             {
@@ -223,12 +243,16 @@ namespace HexGame
             if (prefab != null && cell != null && !this.IsOccupied(coord))
             {
                 Vector3 cellLoc = cell.transform.position;
-                var unit = (Unit)Instantiate(prefab);
+                unit = (Unit)Instantiate(prefab);
                 unit.transform.position = new Vector3(cellLoc.x, this.UnitHeight, cellLoc.z);
                 unit.MapController = this;
                 unit.Coordinate = coord;
+                unit.Mesh.renderer.material.color = owner.Color;
                 this.SetUnit(coord.X, coord.Y, unit);
+                owner.AddUnit(unit);
             }
+
+            return unit;
         }
 
         /// <summary>

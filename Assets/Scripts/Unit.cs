@@ -65,6 +65,12 @@ namespace HexGame
         public MeshRenderer HealthBar;
 
         /// <summary>
+        /// Object mesh
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public MeshRenderer Mesh;
+
+        /// <summary>
         /// Unit health
         /// </summary>
         private int health;

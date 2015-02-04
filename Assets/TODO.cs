@@ -10,5 +10,4 @@
  * free camera
  * game logging
  * deploy to web
- * check into github
  */
