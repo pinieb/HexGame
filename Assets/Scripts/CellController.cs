@@ -102,7 +102,7 @@ namespace HexGame
                     break;
 
                 case CellHighlightMode.Heal:
-                    this.HighlightCell(Color.yellow);
+                    this.HighlightCell(Color.magenta);
                     break;
 
                 case CellHighlightMode.None:
