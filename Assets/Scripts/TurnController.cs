@@ -16,7 +16,6 @@ namespace HexGame
     /// </summary>
     public class TurnController : MonoBehaviour
     {
-
         /// <summary>
         /// Board controller
         /// </summary>
@@ -72,7 +71,7 @@ namespace HexGame
         }
 
         /// <summary>
-        /// Gets or sets whether or not the game has ended
+        /// Gets or sets a value indicating whether or not the game has ended
         /// </summary>
         public bool GameOver
         {

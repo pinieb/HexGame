@@ -177,6 +177,7 @@ namespace HexGame
         /// <summary>
         /// Updates at a fixed interval
         /// </summary>
+        /// <param name="player">Player to check for win</param>
         public void HandleWin(PlayerController player)
         {
             if (!this.TurnController.GameOver && this.CheckForWin(player))
@@ -548,7 +549,7 @@ namespace HexGame
         /// <summary>
         /// Sets the unit on a given cell
         /// </summary>
-        /// <param name="coord">Coodinate to set</param>
+        /// <param name="coord">Coordinate to set</param>
         /// <param name="unit">Unit to place</param>
         private void SetUnit(CellCoordinate coord, Unit unit)
         {
