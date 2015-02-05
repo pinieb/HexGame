@@ -31,6 +31,12 @@ namespace HexGame
         public CubeController CubeUnitPrefab;
 
         /// <summary>
+        /// Pyramid prefab
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public PyramidController PyramidUnitPrefab;
+
+        /// <summary>
         /// X scale
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
@@ -215,6 +221,10 @@ namespace HexGame
                     prefab = this.CubeUnitPrefab;
                     break;
 
+                case UnitType.Pyramid:
+                    prefab = this.PyramidUnitPrefab;
+                    break;
+
                 default:
                     prefab = null;
                     break;
@@ -259,6 +269,14 @@ namespace HexGame
                     // highlight possible attacks
                     List<CellController> cellsToHighlightForAttack = cellList.Where(cell => unit.CanAttack(this.GetUnit(cell))).ToList();
                     this.HighlightCells(cellsToHighlightForAttack, CellHighlightMode.Attack);
+
+                    // if the unit can heal, highlight the possible heals
+                    var pyramid = unit as PyramidController;
+                    if (pyramid != null)
+                    {
+                        List<CellController> cellsToHighlightForHeal = cellList.Where(cell => pyramid.CanHeal(this.GetUnit(cell))).ToList();
+                        this.HighlightCells(cellsToHighlightForHeal, CellHighlightMode.Heal);
+                    }
                 }
                 else if (this.selection != null && this.selection != unit)
                 {

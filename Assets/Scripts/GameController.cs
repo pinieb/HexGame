@@ -67,6 +67,9 @@ namespace HexGame
 
             spawnCoord = new CellCoordinate(2, 2);
             this.BoardController.SpawnUnit(UnitType.Cube, spawnCoord, this.Players[1]);
+
+            spawnCoord = new CellCoordinate(0, 0);
+            this.BoardController.SpawnUnit(UnitType.Pyramid, spawnCoord, this.Players[1]);
         }
     }
 }

@@ -28,6 +28,11 @@ namespace HexGame
         Attack,
 
         /// <summary>
+        /// Highlight mode for heal
+        /// </summary>
+        Heal,
+
+        /// <summary>
         /// No highlight
         /// </summary>
         None

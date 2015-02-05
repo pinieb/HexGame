@@ -15,6 +15,11 @@ namespace HexGame
         /// <summary>
         /// Cube unit
         /// </summary>
-        Cube
+        Cube,
+
+        /// <summary>
+        /// Pyramid unit
+        /// </summary>
+        Pyramid
     }
 }

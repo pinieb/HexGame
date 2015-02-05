@@ -101,6 +101,10 @@ namespace HexGame
                     this.HighlightCell(Color.red);
                     break;
 
+                case CellHighlightMode.Heal:
+                    this.HighlightCell(Color.yellow);
+                    break;
+
                 case CellHighlightMode.None:
                 default:
                     this.UnhighlightCell();

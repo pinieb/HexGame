@@ -1,7 +1,5 @@
 ﻿/*
  * TODO
- * add turn manager
- * add turn indicator
  * add two more classes
  *      pyramids (healers)
  *      arrows (ranged attack)
