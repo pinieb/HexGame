@@ -8,6 +8,7 @@
 namespace HexGame
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using UnityEngine;
 
     /// <summary>
@@ -15,6 +16,13 @@ namespace HexGame
     /// </summary>
     public class TurnController : MonoBehaviour
     {
+
+        /// <summary>
+        /// Board controller
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public BoardController BoardController;
+
         /// <summary>
         /// List of players
         /// </summary>
@@ -46,12 +54,30 @@ namespace HexGame
         }
 
         /// <summary>
+        /// Gets the number of half turns that have occurred
+        /// </summary>
+        public int HalfTurnCount
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// Gets the unit that moved this turn (if any)
         /// </summary>
         public Unit UnitMoved
         {
             get;
             private set;
+        }
+
+        /// <summary>
+        /// Gets or sets whether or not the game has ended
+        /// </summary>
+        public bool GameOver
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -62,6 +88,8 @@ namespace HexGame
         {
             this.players = new List<PlayerController>(players);
             this.turnIndex = 0;
+            this.TurnNumber = 0;
+            this.HalfTurnCount = 0;
         }
 
         /// <summary>
@@ -86,9 +114,15 @@ namespace HexGame
         /// </summary>
         public void EndTurn()
         {
-            this.UnitMoved = null;
-            this.turnIndex = ++this.turnIndex % this.players.Count;
-            this.TurnNumber++;
+            this.BoardController.HandleWin(this.TurnToPlay);
+
+            if (!this.GameOver)
+            {
+                this.UnitMoved = null;
+                this.turnIndex = ++this.turnIndex % this.players.Count;
+                this.HalfTurnCount++;
+                this.TurnNumber = this.HalfTurnCount / 2; // we want this to truncate
+            }
         }
     }
 }

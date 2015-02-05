@@ -97,6 +97,8 @@ namespace HexGame
                     // die
                     this.health = 0;
                     Unit.DestroyImmediate(this.gameObject);
+                    this.BoardController.RemoveUnit(this);
+                    this.Owner.RemoveUnit(this);
                     return;
                 }
                 else if (value > this.MaxHealth)

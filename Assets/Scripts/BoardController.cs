@@ -11,6 +11,7 @@ namespace HexGame
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using UnityEditor;
     using UnityEngine;
 
     /// <summary>
@@ -174,6 +175,18 @@ namespace HexGame
         }
 
         /// <summary>
+        /// Updates at a fixed interval
+        /// </summary>
+        public void HandleWin(PlayerController player)
+        {
+            if (!this.TurnController.GameOver && this.CheckForWin(player))
+            {
+                EditorUtility.DisplayDialog("Game over!", "Player " + player.Id + " is the winner!", "OK");
+                this.TurnController.GameOver = true;
+            }
+        }
+
+        /// <summary>
         /// Move a unit
         /// </summary>
         /// <param name="source">Cell to move unit from</param>
@@ -325,7 +338,6 @@ namespace HexGame
                 this.CancelSelection();
                 this.ProcessSelection(temp);
             }
-            ////this.CancelSelection();
         }
 
         /// <summary>
@@ -420,6 +432,34 @@ namespace HexGame
 
             return list;
         }
+
+        /// <summary>
+        /// Gets all units as a list
+        /// Removes the null units
+        /// </summary>
+        /// <returns>List of units</returns>
+        public List<Unit> GetUnitsAsList()
+        {
+            List<Unit> list = new List<Unit>();
+            foreach (Unit u in this.Units)
+            {
+                if (u != null)
+                {
+                    list.Add(u);
+                }
+            }
+
+            return list;
+        }
+
+        /// <summary>
+        /// Remove a unit from the board
+        /// </summary>
+        /// <param name="unit">Unit to remove</param>
+        public void RemoveUnit(Unit unit)
+        {
+            this.SetUnit(unit.Coordinate, null);
+        }
         
         /// <summary>
         /// Assigns a cell controller to a certain coordinate
@@ -503,6 +543,34 @@ namespace HexGame
         private Unit GetUnit(CellCoordinate coord)
         {
             return this.GetUnit(coord.X, coord.Y);
+        }
+
+        /// <summary>
+        /// Sets the unit on a given cell
+        /// </summary>
+        /// <param name="coord">Coodinate to set</param>
+        /// <param name="unit">Unit to place</param>
+        private void SetUnit(CellCoordinate coord, Unit unit)
+        {
+            this.SetUnit(coord.X, coord.Y, unit);
+        }
+
+        /// <summary>
+        /// Checks to see if the given player has any enemy units left on the board
+        /// </summary>
+        /// <param name="player">The player to check</param>
+        /// <returns>Whether or not the player has won</returns>
+        private bool CheckForWin(PlayerController player)
+        {
+            foreach (Unit u in this.GetUnitsAsList())
+            {
+                if (u.Owner != player)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

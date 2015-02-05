@@ -62,5 +62,15 @@ namespace HexGame
             u.Owner = this;
             this.units.Add(u);
         }
+
+        /// <summary>
+        /// Remove a unit from the units list
+        /// </summary>
+        /// <param name="u">Unit to remove</param>
+        public void RemoveUnit(Unit u)
+        {
+            u.Owner = null;
+            this.units.Remove(u);
+        }
     }
 }
