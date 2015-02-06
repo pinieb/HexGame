@@ -38,12 +38,19 @@ namespace HexGame
         /// </summary>
         public void OnGUI()
         {
-            this.TurnIndicator.text = "Player " + this.TurnController.TurnToPlay.Id;
-
-            if (GUI.Button(new Rect((Screen.width / 2) - 50, (Screen.height / 10) - 5, 100, 20), "End Turn"))
+            if (!this.TurnController.GameOver)
             {
-                this.BoardController.CancelSelection();
-                this.TurnController.EndTurn();
+                this.TurnIndicator.text = "Player " + this.TurnController.TurnToPlay.Id;
+
+                if (GUI.Button(new Rect((Screen.width / 2) - 50, (Screen.height / 10) - 5, 100, 20), "End Turn"))
+                {
+                    this.BoardController.CancelSelection();
+                    this.TurnController.EndTurn();
+                }
+            }
+            else
+            {
+                this.TurnIndicator.text = "Game Over!";
             }
         }
     }

@@ -11,7 +11,6 @@ namespace HexGame
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using UnityEditor;
     using UnityEngine;
 
     /// <summary>
@@ -188,7 +187,6 @@ namespace HexGame
         {
             if (!this.TurnController.GameOver && this.CheckForWin(player))
             {
-                EditorUtility.DisplayDialog("Game over!", "Player " + player.Id + " is the winner!", "OK");
                 this.TurnController.GameOver = true;
             }
         }
