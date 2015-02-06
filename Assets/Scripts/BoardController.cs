@@ -38,6 +38,12 @@ namespace HexGame
         public PyramidController PyramidUnitPrefab;
 
         /// <summary>
+        /// Arrow prefab
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public ArrowController ArrowUnitPrefab;
+
+        /// <summary>
         /// X scale
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
@@ -239,6 +245,10 @@ namespace HexGame
                     prefab = this.PyramidUnitPrefab;
                     break;
 
+                case UnitType.Arrow:
+                    prefab = this.ArrowUnitPrefab;
+                    break;
+
                 default:
                     prefab = null;
                     break;
@@ -294,9 +304,11 @@ namespace HexGame
                 }
                 else if (this.selection != null && this.selection != unit)
                 {
+                    bool canStillAct = false;
                     if (this.selection.ActOn(unit))
                     {
-                        this.TurnController.HandleUnitAction();
+                        canStillAct = this.selection.CanAct;
+                        this.TurnController.HandleUnitAction(this.selection);
                     }
 
                     // in case it just died
@@ -305,7 +317,10 @@ namespace HexGame
                         unit.Deselect();
                     }
 
-                    this.CancelSelection();
+                    if (!canStillAct)
+                    {
+                        this.CancelSelection();
+                    }
                 }
                 else
                 {

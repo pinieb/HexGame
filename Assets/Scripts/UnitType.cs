@@ -20,6 +20,11 @@ namespace HexGame
         /// <summary>
         /// Pyramid unit
         /// </summary>
-        Pyramid
+        Pyramid,
+
+        /// <summary>
+        /// Arrow unit
+        /// </summary>
+        Arrow
     }
 }

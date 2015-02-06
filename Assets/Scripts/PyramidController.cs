@@ -44,11 +44,13 @@ namespace HexGame
             if (this.CanHeal(unit))
             {
                 this.Heal(unit);
+                this.CanAct = false;
                 return true;
             }
             else if (this.CanAttack(unit))
             {
                 this.Attack(unit);
+                this.CanAct = false;
                 return true;
             }
 

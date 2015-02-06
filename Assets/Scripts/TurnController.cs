@@ -103,9 +103,14 @@ namespace HexGame
         /// <summary>
         /// Handles a unit's action
         /// </summary>
-        public void HandleUnitAction()
+        /// <param name="unit">Unit that acted</param>
+        public void HandleUnitAction(Unit unit)
         {
-            this.EndTurn();
+            if (!unit.CanAct)
+            {
+                this.EndTurn();
+                unit.ResetUnit();
+            }
         }
 
         /// <summary>

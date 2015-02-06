@@ -125,6 +125,15 @@ namespace HexGame
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the unit can act
+        /// </summary>
+        public virtual bool CanAct
+        {
+            get;
+            protected set;
+        }
+
+        /// <summary>
         /// Returns whether the unit can move to the given coordinate
         /// </summary>
         /// <param name="coord">Coordinate to check</param>
@@ -165,6 +174,7 @@ namespace HexGame
             if (this.CanAttack(unit))
             {
                 this.Attack(unit);
+                this.CanAct = false;
                 return true;
             }
 
@@ -200,6 +210,14 @@ namespace HexGame
         {
             this.Coordinate = coord;
             this.transform.position = worldPosition;
+        }
+
+        /// <summary>
+        /// Prepares the unit for the next turn
+        /// </summary>
+        public virtual void ResetUnit()
+        {
+            this.CanAct = true;
         }
 
         /// <summary>
