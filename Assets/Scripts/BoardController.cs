@@ -302,10 +302,9 @@ namespace HexGame
                 }
                 else if (this.selection != null && this.selection != unit)
                 {
-                    bool canStillAct = false;
+                    Unit tempSelection = this.selection;
                     if (this.selection.ActOn(unit))
                     {
-                        canStillAct = this.selection.CanAct;
                         this.TurnController.HandleUnitAction(this.selection);
                     }
 
@@ -315,9 +314,10 @@ namespace HexGame
                         unit.Deselect();
                     }
 
-                    if (!canStillAct)
+                    this.CancelSelection();
+                    if (tempSelection.CanAct)
                     {
-                        this.CancelSelection();
+                        this.ProcessSelection(tempSelection);
                     }
                 }
                 else
