@@ -53,16 +53,10 @@ namespace HexGame
         public CellCoordinate Coordinate;
 
         /// <summary>
-        /// Health bar offset
+        /// Health bar manager
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
-        public double HealthBarOffset = .53;
-
-        /// <summary>
-        /// Health bar
-        /// </summary>
-        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
-        public MeshRenderer HealthBar;
+        public HealthBarManager HealthBarManager;
 
         /// <summary>
         /// Object mesh
@@ -109,9 +103,6 @@ namespace HexGame
                 {
                     this.health = value;
                 }
-
-                double offset = this.HealthBarOffset * (1 - (this.health / (double)this.MaxHealth));
-                this.HealthBar.material.mainTextureOffset = new Vector2((float)offset, 0.0f);
             }
         }
 
@@ -131,6 +122,17 @@ namespace HexGame
         {
             get;
             protected set;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the unit is selected
+        /// </summary>
+        public bool IsSelected
+        {
+            get
+            {
+                return this.selected;
+            }
         }
 
         /// <summary>
@@ -187,6 +189,7 @@ namespace HexGame
         public void Select()
         {
             this.selected = true;
+            this.HealthBarManager.Highlight();
             this.BoardController.HighlightCells(new List<CellCoordinate>() { this.Coordinate }, CellHighlightMode.Selected);
         }
 
@@ -196,6 +199,7 @@ namespace HexGame
         public void Deselect()
         {
             this.selected = false;
+            this.HealthBarManager.Lowlight();
         }
 
         /// <summary>
@@ -206,7 +210,6 @@ namespace HexGame
         public virtual void MoveTo(CellCoordinate coord, Vector3 worldPosition)
         {
             this.Coordinate = coord;
-            Vector3 lookPos = worldPosition;
             this.transform.position = worldPosition;
         }
 
@@ -231,15 +234,37 @@ namespace HexGame
         /// <summary>
         /// Starts the unit object
         /// </summary>
-        protected void Start()
+        public void Start()
         {
             this.Health = this.MaxHealth;
         }
 
         /// <summary>
+        /// On mouse over handler
+        /// </summary>
+        public virtual void OnMouseOver()
+        {
+            if (!this.selected)
+            {
+                this.HealthBarManager.Highlight();
+            }
+        }
+
+        /// <summary>
+        /// On mouse exit handler
+        /// </summary>
+        public virtual void OnMouseExit()
+        {
+            if (!this.selected)
+            {
+                this.HealthBarManager.Lowlight();
+            }
+        }
+
+        /// <summary>
         /// On mouse down handler
         /// </summary>
-        protected virtual void OnMouseDown()
+        public virtual void OnMouseDown()
         {
             if (!this.selected)
             {

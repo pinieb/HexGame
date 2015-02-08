@@ -82,7 +82,7 @@ namespace HexGame
         /// <param name="shouldSnap">Whether or not the look should snap to certain angles</param>
         public override void LookAt(Vector3 worldPosition, bool shouldSnap = false)
         {
-            Quaternion healthBarRotation = this.HealthBar.transform.rotation;
+            Quaternion healthBarRotation = this.HealthBarManager.transform.rotation;
 
             Vector3 lookPos = new Vector3(worldPosition.x, this.transform.position.y, worldPosition.z);
             this.transform.LookAt(lookPos, Vector3.up);
@@ -94,7 +94,7 @@ namespace HexGame
                 this.transform.rotation = rotation;
             }
 
-            this.HealthBar.transform.rotation = healthBarRotation;
+            this.HealthBarManager.transform.rotation = healthBarRotation;
         }
 
         /// <summary>
