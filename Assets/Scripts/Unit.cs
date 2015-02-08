@@ -65,6 +65,12 @@ namespace HexGame
         public MeshRenderer HealthBar;
 
         /// <summary>
+        /// Main camera
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public Camera MainCamera;
+
+        /// <summary>
         /// Object mesh
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
@@ -188,8 +194,6 @@ namespace HexGame
         {
             this.selected = true;
             this.BoardController.HighlightCells(new List<CellCoordinate>() { this.Coordinate }, CellHighlightMode.Selected);
-            
-            // this.renderer.material.shader = Shader.Find("Outlined/Silhouetted Diffuse");
         }
 
         /// <summary>
@@ -198,7 +202,6 @@ namespace HexGame
         public void Deselect()
         {
             this.selected = false;
-            this.renderer.material.shader = Shader.Find("Diffuse");
         }
 
         /// <summary>
@@ -206,9 +209,10 @@ namespace HexGame
         /// </summary>
         /// <param name="coord">Cell coordinate</param>
         /// <param name="worldPosition">World position</param>
-        public void MoveTo(CellCoordinate coord, Vector3 worldPosition)
+        public virtual void MoveTo(CellCoordinate coord, Vector3 worldPosition)
         {
             this.Coordinate = coord;
+            Vector3 lookPos = worldPosition;
             this.transform.position = worldPosition;
         }
 

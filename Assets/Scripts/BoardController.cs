@@ -52,7 +52,7 @@ namespace HexGame
         /// Y scale
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
-        public float YPosition = -1.0f;
+        public float YPosition = -0.9f;
 
         /// <summary>
         /// Grid size
@@ -61,16 +61,16 @@ namespace HexGame
         public int GridSize = 5;
 
         /// <summary>
-        /// Unit height
-        /// </summary>
-        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
-        public float UnitHeight = 0f;
-
-        /// <summary>
         /// Turn controller
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
         public TurnController TurnController;
+
+        /// <summary>
+        /// Main camera
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public Camera MainCamera;
 
         /// <summary>
         /// Unit list
@@ -204,7 +204,7 @@ namespace HexGame
                 this.SetUnit(target.X, target.Y, unit);
                 this.SetUnit(source.X, source.Y, null);
                 Vector3 cellPosition = this.GetCell(target.X, target.Y).transform.position;
-                Vector3 unitPosition = new Vector3(cellPosition.x, this.UnitHeight, cellPosition.z);
+                Vector3 unitPosition = new Vector3(cellPosition.x, unit.transform.position.y, cellPosition.z);
                 unit.MoveTo(target, unitPosition);
             }
         }
@@ -257,10 +257,11 @@ namespace HexGame
             {
                 Vector3 cellLoc = cell.transform.position;
                 var unit = (Unit)Instantiate(prefab);
-                unit.transform.position = new Vector3(cellLoc.x, this.UnitHeight, cellLoc.z);
+                unit.transform.position = new Vector3(cellLoc.x, unit.transform.position.y, cellLoc.z);
                 unit.BoardController = this;
                 unit.Coordinate = coord;
                 unit.Mesh.renderer.material.color = owner.Color;
+                unit.MainCamera = this.MainCamera;
                 this.SetUnit(coord.X, coord.Y, unit);
                 owner.AddUnit(unit);
             }

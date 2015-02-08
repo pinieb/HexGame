@@ -62,5 +62,37 @@ namespace HexGame
             this.CanAct = true;
             this.attacksUsedThisTurn = 0;
         }
+
+        /// <summary>
+        /// Moves to the given coordinate and update the unit's world position
+        /// </summary>
+        /// <param name="coord">Cell coordinate</param>
+        /// <param name="worldPosition">World position</param>
+        public override void MoveTo(CellCoordinate coord, Vector3 worldPosition)
+        {
+            this.Coordinate = coord;
+            this.LookAt(worldPosition);
+            this.transform.position = worldPosition;
+        }
+
+        /// <summary>
+        /// Attacks another unit
+        /// </summary>
+        /// <param name="unit">Unit to attack</param>
+        protected override void Attack(Unit unit)
+        {
+            base.Attack(unit);
+            this.LookAt(unit.transform.position);
+        }
+
+        /// <summary>
+        /// Look at
+        /// </summary>
+        private void LookAt(Vector3 worldPosition)
+        {
+            Quaternion healthBarRotation = this.HealthBar.transform.rotation;
+            this.transform.LookAt(worldPosition, Vector3.up);
+            this.HealthBar.transform.rotation = healthBarRotation;
+        }
     }
 }
