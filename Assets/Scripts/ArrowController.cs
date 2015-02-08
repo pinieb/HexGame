@@ -89,8 +89,8 @@ namespace HexGame
 
             if (shouldSnap)
             {
-                int ySnap = 60 * ((int)this.transform.eulerAngles.y / 60) + 30;
-                Quaternion rotation = Quaternion.Euler(0f, ySnap, 0f);
+                int snap = (60 * (((int)this.transform.eulerAngles.y) / 60)) + 30;
+                Quaternion rotation = Quaternion.Euler(0f, snap, 0f);
                 this.transform.rotation = rotation;
             }
 
