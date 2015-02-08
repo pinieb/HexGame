@@ -76,6 +76,28 @@ namespace HexGame
         }
 
         /// <summary>
+        /// Turns the unit to face the given position
+        /// </summary>
+        /// <param name="worldPosition">Position to face</param>
+        /// <param name="shouldSnap">Whether or not the look should snap to certain angles</param>
+        public override void LookAt(Vector3 worldPosition, bool shouldSnap = false)
+        {
+            Quaternion healthBarRotation = this.HealthBar.transform.rotation;
+
+            Vector3 lookPos = new Vector3(worldPosition.x, this.transform.position.y, worldPosition.z);
+            this.transform.LookAt(lookPos, Vector3.up);
+
+            if (shouldSnap)
+            {
+                int ySnap = 60 * ((int)this.transform.eulerAngles.y / 60) + 30;
+                Quaternion rotation = Quaternion.Euler(0f, ySnap, 0f);
+                this.transform.rotation = rotation;
+            }
+
+            this.HealthBar.transform.rotation = healthBarRotation;
+        }
+
+        /// <summary>
         /// Attacks another unit
         /// </summary>
         /// <param name="unit">Unit to attack</param>
@@ -83,16 +105,6 @@ namespace HexGame
         {
             base.Attack(unit);
             this.LookAt(unit.transform.position);
-        }
-
-        /// <summary>
-        /// Look at
-        /// </summary>
-        private void LookAt(Vector3 worldPosition)
-        {
-            Quaternion healthBarRotation = this.HealthBar.transform.rotation;
-            this.transform.LookAt(worldPosition, Vector3.up);
-            this.HealthBar.transform.rotation = healthBarRotation;
         }
     }
 }

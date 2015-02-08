@@ -65,12 +65,6 @@ namespace HexGame
         public MeshRenderer HealthBar;
 
         /// <summary>
-        /// Main camera
-        /// </summary>
-        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
-        public Camera MainCamera;
-
-        /// <summary>
         /// Object mesh
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
@@ -222,6 +216,16 @@ namespace HexGame
         public virtual void ResetUnit()
         {
             this.CanAct = true;
+        }
+
+        /// <summary>
+        /// Turns the unit to face the given position
+        /// </summary>
+        /// <param name="worldPosition">Position to face</param>
+        /// <param name="shouldSnap">Whether or not the look should snap to certain angles</param>
+        public virtual void LookAt(Vector3 worldPosition, bool shouldSnap = false)
+        {
+            return;
         }
 
         /// <summary>

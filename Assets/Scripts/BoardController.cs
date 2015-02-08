@@ -67,12 +67,6 @@ namespace HexGame
         public TurnController TurnController;
 
         /// <summary>
-        /// Main camera
-        /// </summary>
-        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
-        public Camera MainCamera;
-
-        /// <summary>
         /// Unit list
         /// </summary>
         private Unit[,] units;
@@ -261,7 +255,7 @@ namespace HexGame
                 unit.BoardController = this;
                 unit.Coordinate = coord;
                 unit.Mesh.renderer.material.color = owner.Color;
-                unit.MainCamera = this.MainCamera;
+                unit.LookAt(new Vector3(0f, 0f, 0f), true);
                 this.SetUnit(coord.X, coord.Y, unit);
                 owner.AddUnit(unit);
             }
