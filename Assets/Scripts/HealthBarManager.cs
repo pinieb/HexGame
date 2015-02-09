@@ -74,13 +74,13 @@ namespace HexGame
         /// Min health color
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
-        public Color MinColor = Color.red;
+        public Color MinHealthColor = Color.red;
 
         /// <summary>
         /// Max health color
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
-        public Color MaxColor = Color.green;
+        public Color MaxHealthColor = Color.green;
 
         /// <summary>
         /// Starts the object
@@ -97,7 +97,7 @@ namespace HexGame
         {
             this.FillImage.rectTransform.localScale = new Vector3(this.Owner.Health / (float)this.Owner.MaxHealth, 1f, 1f);
             float alpha = this.FillImage.color.a;
-            Color c = Color.Lerp(this.MinColor, this.MaxColor, Mathf.Lerp(0f, 1f, this.FillImage.rectTransform.localScale.x));
+            Color c = Color.Lerp(this.MinHealthColor, this.MaxHealthColor, Mathf.Lerp(0f, 1f, this.FillImage.rectTransform.localScale.x));
             c.a = alpha;
             this.FillImage.color = c;
         }
