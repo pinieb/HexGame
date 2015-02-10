@@ -51,9 +51,9 @@ namespace HexGame
             // Create players
             this.Players = new List<PlayerController>();
             this.Players.Add(new PlayerController(1));
-            this.Players[0].Color = Color.red;
+            this.Players[0].Color = HexGameColor.Red;
             this.Players.Add(new PlayerController(2));
-            this.Players[1].Color = Color.cyan;
+            this.Players[1].Color = HexGameColor.Blue;
 
             // Initialize Turn Controller
             this.TurnController.Initialize(this.Players);

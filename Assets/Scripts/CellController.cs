@@ -90,19 +90,19 @@ namespace HexGame
             switch (mode)
             {
                 case CellHighlightMode.Selected:
-                    this.HighlightCell(Color.cyan);
+                    this.HighlightCell(HexGameColor.Cyan);
                     break;
 
                 case CellHighlightMode.Move:
-                    this.HighlightCell(Color.green);
+                    this.HighlightCell(HexGameColor.Green);
                     break;
 
                 case CellHighlightMode.Attack:
-                    this.HighlightCell(Color.red);
+                    this.HighlightCell(HexGameColor.Red);
                     break;
 
                 case CellHighlightMode.Heal:
-                    this.HighlightCell(Color.magenta);
+                    this.HighlightCell(HexGameColor.Purple);
                     break;
 
                 case CellHighlightMode.None:
