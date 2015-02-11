@@ -60,12 +60,12 @@ namespace HexGame
         {
             if (Input.GetKey(KeyCode.RightArrow))
             {
-                this.UpdateParameterAndGetNewPosition(this.RotationStepSize);
+                this.UpdateParameterAndGetNewPosition((-1) * this.RotationStepSize);
             }
 
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                this.UpdateParameterAndGetNewPosition((-1) * this.RotationStepSize);
+                this.UpdateParameterAndGetNewPosition(this.RotationStepSize);
             }
 
             if (Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow))
