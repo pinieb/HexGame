@@ -79,6 +79,7 @@ namespace HexGame
         /// <param name="unit">Unit to heal</param>
         protected void Heal(Unit unit)
         {
+            GameLogger.Instance.AddMove(ActionRecord.HealAction(this, this.Coordinate, unit, unit.Coordinate));
             unit.Health += this.HealPower;
         }
     }

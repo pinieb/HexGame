@@ -269,7 +269,7 @@ namespace HexGame
         {
             if (unit != null)
             {
-                if (this.selection == null && this.TurnController.TurnToPlay == unit.Owner)
+                if (this.selection == null && this.TurnController.PlayerToMove == unit.Owner)
                 {
                     this.selection = unit;
                     unit.Select();

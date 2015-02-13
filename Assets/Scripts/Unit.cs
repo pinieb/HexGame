@@ -209,6 +209,7 @@ namespace HexGame
         /// <param name="worldPosition">World position</param>
         public virtual void MoveTo(CellCoordinate coord, Vector3 worldPosition)
         {
+            GameLogger.Instance.AddMove(ActionRecord.MoveAction(this, this.Coordinate, coord));
             this.Coordinate = coord;
             this.transform.position = worldPosition;
         }
@@ -282,6 +283,7 @@ namespace HexGame
         /// <param name="unit">Unit to attack</param>
         protected virtual void Attack(Unit unit)
         {
+            GameLogger.Instance.AddMove(ActionRecord.AttackAction(this, this.Coordinate, unit, unit.Coordinate));
             unit.Health -= this.AttackPower;
         }
     }

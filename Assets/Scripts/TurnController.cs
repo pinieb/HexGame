@@ -35,7 +35,7 @@ namespace HexGame
         /// <summary>
         /// Gets whose turn it is to play
         /// </summary>
-        public PlayerController TurnToPlay
+        public PlayerController PlayerToMove
         {
             get
             {
@@ -87,8 +87,10 @@ namespace HexGame
         {
             this.players = new List<PlayerController>(players);
             this.turnIndex = 0;
-            this.TurnNumber = 0;
+            this.TurnNumber = 1;
             this.HalfTurnCount = 0;
+
+            GameLogger.Instance.AddTurn(new TurnRecord(this.TurnNumber, this.PlayerToMove));
         }
 
         /// <summary>
@@ -118,14 +120,16 @@ namespace HexGame
         /// </summary>
         public void EndTurn()
         {
-            this.BoardController.HandleWin(this.TurnToPlay);
+            this.BoardController.HandleWin(this.PlayerToMove);
 
             if (!this.GameOver)
             {
                 this.UnitMoved = null;
                 this.turnIndex = ++this.turnIndex % this.players.Count;
                 this.HalfTurnCount++;
-                this.TurnNumber = this.HalfTurnCount / 2; // we want this to truncate
+                this.TurnNumber = (this.HalfTurnCount / 2) + 1; // we want this to truncate
+
+                GameLogger.Instance.AddTurn(new TurnRecord(this.TurnNumber, this.PlayerToMove));
             }
         }
     }

@@ -7,6 +7,7 @@
 
 namespace HexGame
 {
+    using System.Diagnostics.CodeAnalysis;
     using UnityEngine;
 
     /// <summary>
@@ -15,42 +16,29 @@ namespace HexGame
     public class CameraController : MonoBehaviour
     {
         /// <summary>
-        /// Track radius
-        /// </summary>
-        public float TrackRadius = 7.5f;
-
-        /// <summary>
-        /// Rotation step size
-        /// </summary>
-        public float RotationStepSize = 0.05f;
-
-        /// <summary>
         /// Zoom step size
         /// </summary>
-        public float ZoomStepSize = 0.1f;
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public float ZoomStepSize = 5f;
 
         /// <summary>
         /// Minimum camera height
         /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
         public float MinYValue = 2f;
 
         /// <summary>
         /// Maximum camera height
         /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
         public float MaxYValue = 10f;
-
-        /// <summary>
-        /// Tracks the value of the radian parameter for the camera's track
-        /// </summary>
-        private float parameterValue;
 
         /// <summary>
         /// Starts the camera
         /// </summary>
-        void Start()
+        public void Start()
         {
-            this.parameterValue = 0f;
-            this.UpdateParameterAndGetNewPosition(0f);
+            Camera.main.transform.LookAt(Vector3.zero);
         }
 
         /// <summary>
@@ -60,12 +48,12 @@ namespace HexGame
         {
             if (Input.GetKey(KeyCode.RightArrow))
             {
-                this.UpdateParameterAndGetNewPosition((-1) * this.RotationStepSize);
+                this.transform.RotateAround(Vector3.zero, Vector3.up, -20 * Time.deltaTime);
             }
 
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                this.UpdateParameterAndGetNewPosition(this.RotationStepSize);
+                this.transform.RotateAround(Vector3.zero, Vector3.up, 10 * Time.deltaTime);
             }
 
             if (Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow))
@@ -77,21 +65,6 @@ namespace HexGame
             {
                 this.Zoom(this.ZoomStepSize);
             }
-
-            Camera.main.transform.LookAt(new Vector3(0f, 0f, 0f));
-        }
-
-        /// <summary>
-        /// Handles keeping the camera on its track
-        /// </summary>
-        /// <param name="parameterDelta">How much to move it by</param>
-        private void UpdateParameterAndGetNewPosition(float parameterDelta)
-        {
-            this.parameterValue += parameterDelta;
-            Vector3 pos = Camera.main.transform.position;
-            pos.z = (-1) * this.TrackRadius * Mathf.Cos(this.parameterValue);
-            pos.x = (-1) * this.TrackRadius * Mathf.Sin(this.parameterValue);
-            Camera.main.transform.position = pos;
         }
 
         /// <summary>
@@ -101,16 +74,20 @@ namespace HexGame
         private void Zoom(float zoomDelta)
         {
             Vector3 pos = Camera.main.transform.position;
-            pos.y += zoomDelta;
+            pos.y += Time.deltaTime * zoomDelta;
             if (pos.y < this.MinYValue)
             {
                 pos.y = this.MinYValue;
             }
+
             if (pos.y > this.MaxYValue)
             {
                 pos.y = this.MaxYValue;
             }
+
             Camera.main.transform.position = pos;
+
+            Camera.main.transform.LookAt(Vector3.zero);
         }
     }
 }

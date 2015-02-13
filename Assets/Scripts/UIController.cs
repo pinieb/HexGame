@@ -40,7 +40,7 @@ namespace HexGame
         {
             if (!this.TurnController.GameOver)
             {
-                this.TurnIndicator.text = "Player " + this.TurnController.TurnToPlay.Id;
+                this.TurnIndicator.text = "Player " + this.TurnController.PlayerToMove.Id;
 
                 if (GUI.Button(new Rect((Screen.width / 2) - 50, (Screen.height / 10) - 5, 100, 20), "End Turn"))
                 {
