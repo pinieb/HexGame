@@ -23,6 +23,12 @@ namespace HexGame
         public BoardController BoardController;
 
         /// <summary>
+        /// Move speed
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public float MoveSpeed = 1f;
+
+        /// <summary>
         /// Max move range
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
@@ -73,6 +79,11 @@ namespace HexGame
         /// Is the unit selected
         /// </summary>
         private bool selected;
+
+        /// <summary>
+        /// Target position
+        /// </summary>
+        private Vector3 targetPosition;
 
         /// <summary>
         /// Gets or sets unit health
@@ -133,6 +144,15 @@ namespace HexGame
             {
                 return this.selected;
             }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the unit is moving
+        /// </summary>
+        public bool IsMoving
+        {
+            get;
+            private set;
         }
 
         /// <summary>
@@ -211,7 +231,27 @@ namespace HexGame
         {
             GameLogger.Instance.AddMove(ActionRecord.MoveAction(this, this.Coordinate, coord));
             this.Coordinate = coord;
-            this.transform.position = worldPosition;
+            this.IsMoving = true;
+            this.targetPosition = worldPosition;
+        }
+
+        /// <summary>
+        /// Runs on every frame
+        /// </summary>
+        public void Update()
+        {
+            if (this.IsMoving)
+            {
+                if (this.transform.position == this.targetPosition)
+                {
+                    this.IsMoving = false;
+                }
+                else
+                {
+                    float step = this.MoveSpeed * Time.deltaTime;
+                    this.transform.position = Vector3.MoveTowards(this.transform.position, this.targetPosition, step);
+                }
+            }
         }
 
         /// <summary>

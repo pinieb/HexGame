@@ -70,9 +70,8 @@ namespace HexGame
         /// <param name="worldPosition">World position</param>
         public override void MoveTo(CellCoordinate coord, Vector3 worldPosition)
         {
-            this.Coordinate = coord;
             this.LookAt(worldPosition);
-            this.transform.position = worldPosition;
+            base.MoveTo(coord, worldPosition);
         }
 
         /// <summary>
