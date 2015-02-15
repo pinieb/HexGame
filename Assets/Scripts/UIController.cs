@@ -51,7 +51,12 @@ namespace HexGame
             else
             {
                 this.TurnIndicator.text = "Game Over!";
-            }
+
+                if (GUI.Button(new Rect((Screen.width / 2) - 50, (Screen.height / 10) - 5, 100, 20), "Play again"))
+                {
+                    Application.LoadLevel(Application.loadedLevel);
+                }
+            //}
         }
     }
 }
