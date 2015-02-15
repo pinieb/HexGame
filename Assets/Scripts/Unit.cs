@@ -71,6 +71,30 @@ namespace HexGame
         public MeshRenderer Mesh;
 
         /// <summary>
+        /// Float animation speed
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public float FloatAnimationSpeed = .2f;
+
+        /// <summary>
+        /// Float max height
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public float FloatAnimationMaxHeight = .5f;
+
+        /// <summary>
+        /// Float min height
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public float FloatAnimationMinHeight = .25f;
+
+        /// <summary>
+        /// Float animation random range limits
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public float FloatAnimationRandomRangeLimits = .02f;
+
+        /// <summary>
         /// Unit health
         /// </summary>
         private int health;
@@ -84,6 +108,11 @@ namespace HexGame
         /// Target position
         /// </summary>
         private Vector3 targetPosition;
+
+        /// <summary>
+        /// Whether or not the animation is currently ascending or descending
+        /// </summary>
+        private bool ascending;
 
         /// <summary>
         /// Gets or sets unit health
@@ -251,6 +280,30 @@ namespace HexGame
                     float step = this.MoveSpeed * Time.deltaTime;
                     this.transform.position = Vector3.MoveTowards(this.transform.position, this.targetPosition, step);
                 }
+            }
+
+            if (this.Mesh.transform.position.y == this.FloatAnimationMaxHeight && this.ascending)
+            {
+                this.ascending = false;
+            }
+            else if (this.Mesh.transform.position.y == this.FloatAnimationMinHeight && !this.ascending)
+            {
+                this.ascending = true;
+            }
+
+            float entropy = Random.Range(-1 * this.FloatAnimationRandomRangeLimits, this.FloatAnimationRandomRangeLimits);
+            float animationStep = (this.FloatAnimationSpeed + entropy) * Time.deltaTime;
+            if (this.ascending)
+            {
+                this.Mesh.transform.position = Vector3.MoveTowards(this.Mesh.transform.position, 
+                    new Vector3(this.Mesh.transform.position.x, this.FloatAnimationMaxHeight, this.Mesh.transform.position.z), 
+                    animationStep);
+            }
+            else 
+            {
+                this.Mesh.transform.position = Vector3.MoveTowards(this.Mesh.transform.position, 
+                    new Vector3(this.Mesh.transform.position.x, this.FloatAnimationMinHeight, this.Mesh.transform.position.z), 
+                    animationStep);
             }
         }
 
