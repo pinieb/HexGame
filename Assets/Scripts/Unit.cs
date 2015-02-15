@@ -291,8 +291,7 @@ namespace HexGame
                 this.ascending = true;
             }
 
-            float entropy = Random.Range(-1 * this.FloatAnimationRandomRangeLimits, this.FloatAnimationRandomRangeLimits);
-            float animationStep = (this.FloatAnimationSpeed + entropy) * Time.deltaTime;
+            float animationStep = this.FloatAnimationSpeed * Time.deltaTime;
             if (this.ascending)
             {
                 this.Mesh.transform.position = Vector3.MoveTowards(this.Mesh.transform.position, 
@@ -331,6 +330,8 @@ namespace HexGame
         public void Start()
         {
             this.Health = this.MaxHealth;
+            float entropy = Random.Range(-1 * this.FloatAnimationRandomRangeLimits, this.FloatAnimationRandomRangeLimits);
+            this.FloatAnimationSpeed += entropy;
         }
 
         /// <summary>
