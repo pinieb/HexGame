@@ -294,13 +294,15 @@ namespace HexGame
             float animationStep = this.FloatAnimationSpeed * Time.deltaTime;
             if (this.ascending)
             {
-                this.Mesh.transform.position = Vector3.MoveTowards(this.Mesh.transform.position, 
+                this.Mesh.transform.position = Vector3.MoveTowards(
+                    this.Mesh.transform.position, 
                     new Vector3(this.Mesh.transform.position.x, this.FloatAnimationMaxHeight, this.Mesh.transform.position.z), 
                     animationStep);
             }
             else 
             {
-                this.Mesh.transform.position = Vector3.MoveTowards(this.Mesh.transform.position, 
+                this.Mesh.transform.position = Vector3.MoveTowards(
+                    this.Mesh.transform.position, 
                     new Vector3(this.Mesh.transform.position.x, this.FloatAnimationMinHeight, this.Mesh.transform.position.z), 
                     animationStep);
             }

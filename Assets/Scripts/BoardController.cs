@@ -201,20 +201,7 @@ using UnityEngine;
                 Vector3 cellPosition = this.GetCell(target.X, target.Y).transform.position;
                 Vector3 unitPosition = new Vector3(cellPosition.x, unit.transform.position.y, cellPosition.z);
                 unit.MoveTo(target, unitPosition);
-                StartCoroutine(this.WaitForActionToComplete(unit));
-            }
-        }
-
-        /// <summary>
-        /// Waits for an action to complete
-        /// </summary>
-        /// <param name="unit">Unit that's acting</param>
-        /// <returns>Does not return anything</returns>
-        private IEnumerator WaitForActionToComplete(Unit unit)
-        {
-            while (unit.IsMoving)
-            {
-                yield return null;
+                this.StartCoroutine(this.WaitForActionToComplete(unit));
             }
         }
 
@@ -595,6 +582,19 @@ using UnityEngine;
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Waits for an action to complete
+        /// </summary>
+        /// <param name="unit">Unit that's acting</param>
+        /// <returns>Does not return anything</returns>
+        private IEnumerator WaitForActionToComplete(Unit unit)
+        {
+            while (unit.IsMoving)
+            {
+                yield return null;
+            }
         }
     }
 }

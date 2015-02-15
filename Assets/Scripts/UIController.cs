@@ -56,7 +56,7 @@ namespace HexGame
                 {
                     Application.LoadLevel(Application.loadedLevel);
                 }
-            //}
+            }
         }
     }
 }
