@@ -28,31 +28,31 @@ namespace HexGame
         public TurnController TurnController;
 
         /// <summary>
-        /// Turn indicator
+        /// GUI skin
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
-        public GUIText TurnIndicator;
+        public GUISkin Skin;
 
         /// <summary>
         /// Handles GUI events
         /// </summary>
         public void OnGUI()
         {
+            GUI.skin = this.Skin;
             if (!this.TurnController.GameOver)
             {
-                this.TurnIndicator.text = "Player " + this.TurnController.PlayerToMove.Id;
+                GUI.Label(new Rect((Screen.width / 2) - 40, (Screen.height / 10) - 40, 100, 40), "Player " + this.TurnController.PlayerToMove.Id);
 
-                if (GUI.Button(new Rect((Screen.width / 2) - 50, (Screen.height / 10) - 5, 100, 20), "End Turn"))
+                if (GUI.Button(new Rect((Screen.width / 2) - 70, Screen.height / 10, 140, 40), "End Turn"))
                 {
                     this.BoardController.CancelSelection();
                     this.TurnController.EndTurn();
                 }
             }
             else
-            {
-                this.TurnIndicator.text = "Game Over!";
-
-                if (GUI.Button(new Rect((Screen.width / 2) - 50, (Screen.height / 10) - 5, 100, 20), "Play again"))
+            {               
+                GUI.Label(new Rect((Screen.width / 2) - 68, (Screen.height / 10) - 40, 200, 40), "Game Over!");
+                if (GUI.Button(new Rect((Screen.width / 2) - 100, Screen.height / 10, 200, 40), "Play again"))
                 {
                     Application.LoadLevel(Application.loadedLevel);
                 }

@@ -53,7 +53,7 @@ namespace HexGame
 
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                this.transform.RotateAround(Vector3.zero, Vector3.up, 10 * Time.deltaTime);
+                this.transform.RotateAround(Vector3.zero, Vector3.up, 20 * Time.deltaTime);
             }
 
             if (Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow))
