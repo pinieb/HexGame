@@ -37,30 +37,48 @@ namespace HexGame
         /// Instruction pane
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
-        public GameObject InstructionPane;
+        public GameObject InstructionPanePrefab;
+
+        private GameObject instructionsPane;
+
+        public void Update()
+        {
+            if (this.instructionsPane != null && Input.anyKey)
+            {
+                GameObject.Destroy(this.instructionsPane);
+            }
+        }
 
         /// <summary>
         /// Handles GUI events
         /// </summary>
         public void OnGUI()
         {
-            GUI.skin = this.Skin;
-            if (!this.TurnController.GameOver)
+            if (this.instructionsPane == null)
             {
-                GUI.Label(new Rect((Screen.width / 2) - 40, (Screen.height / 10) - 40, 100, 40), "Player " + this.TurnController.PlayerToMove.Id);
+                GUI.skin = this.Skin;
+                if (!this.TurnController.GameOver)
+                {
+                    GUI.Label(new Rect((Screen.width / 2) - 40, (Screen.height / 10) - 40, 100, 40), "Player " + this.TurnController.PlayerToMove.Id);
 
-                if (GUI.Button(new Rect((Screen.width / 2) - 70, Screen.height / 10, 140, 40), "End Turn"))
-                {
-                    this.BoardController.CancelSelection();
-                    this.TurnController.EndTurn();
+                    if (GUI.Button(new Rect((Screen.width / 2) - 70, Screen.height / 10, 140, 40), "End Turn"))
+                    {
+                        this.BoardController.CancelSelection();
+                        this.TurnController.EndTurn();
+                    }
+
+                    if (GUI.Button(new Rect(Screen.width - 200, (Screen.height / 10) - 40, 200, 40), "Instructions"))
+                    {
+                        this.instructionsPane = (GameObject)Instantiate(this.InstructionPanePrefab);
+                    }
                 }
-            }
-            else
-            {               
-                GUI.Label(new Rect((Screen.width / 2) - 68, (Screen.height / 10) - 40, 200, 40), "Game Over!");
-                if (GUI.Button(new Rect((Screen.width / 2) - 100, Screen.height / 10, 200, 40), "Play again"))
+                else
                 {
-                    Application.LoadLevel(Application.loadedLevel);
+                    GUI.Label(new Rect((Screen.width / 2) - 68, (Screen.height / 10) - 40, 200, 40), "Game Over!");
+                    if (GUI.Button(new Rect((Screen.width / 2) - 100, Screen.height / 10, 200, 40), "Play again"))
+                    {
+                        Application.LoadLevel(Application.loadedLevel);
+                    }
                 }
             }
         }
