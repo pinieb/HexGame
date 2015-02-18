@@ -343,11 +343,18 @@ using UnityEngine;
             
             if (this.selection != null && this.TurnController.UnitMoved == null)
             {
-                this.Move(this.selection.Coordinate, cell.Coordinate);
-                this.TurnController.HandleUnitMove(this.selection);
-                var temp = this.selection;
-                this.CancelSelection();
-                this.ProcessSelection(temp);
+                if (this.selection.CanMove(cell.Coordinate))
+                {
+                    this.Move(this.selection.Coordinate, cell.Coordinate);
+                    this.TurnController.HandleUnitMove(this.selection);
+                    var temp = this.selection;
+                    this.CancelSelection();
+                    this.ProcessSelection(temp);
+                }
+                else
+                {
+                    this.CancelSelection();
+                }
             }
         }
 
