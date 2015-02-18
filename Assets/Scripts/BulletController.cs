@@ -50,7 +50,7 @@ namespace HexGame
                 completion();
             }
 
-            this.Destroy(this);
+            BulletController.Destroy(this);
         }
     }
 }

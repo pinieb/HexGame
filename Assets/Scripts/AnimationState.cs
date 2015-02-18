@@ -30,6 +30,11 @@ namespace HexGame
         /// <summary>
         /// Heal state
         /// </summary>
-        Heal
+        Heal,
+
+        /// <summary>
+        /// Turn state
+        /// </summary>
+        Turn
     }
 }

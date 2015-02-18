@@ -7,6 +7,7 @@
 
 namespace HexGame
 {
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using UnityEngine;
@@ -27,6 +28,12 @@ namespace HexGame
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
         public float MoveSpeed = 1f;
+
+        /// <summary>
+        /// Rotation speed
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public float RotationSpeed = 3f;
 
         /// <summary>
         /// Max move range
@@ -360,6 +367,29 @@ namespace HexGame
         {
             GameLogger.Instance.AddMove(ActionRecord.AttackAction(this, this.Coordinate, unit, unit.Coordinate));
             unit.Health -= this.AttackPower;
+        }
+
+        /// <summary>
+        /// Turns to face the target position
+        /// </summary>
+        /// <param name="target">Target position</param>
+        /// <returns>Enumerator for co-routine</returns>
+        protected IEnumerator TurnToFace(Vector3 target)
+        {
+            this.AnimationState = AnimationState.Turn;
+            var neededRotation = Quaternion.LookRotation(target - this.transform.position);
+            var originalRotation = this.transform.rotation;
+
+            float degreesToTurn = (neededRotation.eulerAngles - originalRotation.eulerAngles).magnitude;
+            float turnTime = degreesToTurn / this.RotationSpeed;
+            for (float t = 0f; t < 1f; t += this.RotationSpeed * Time.deltaTime)
+            {
+                this.transform.rotation = Quaternion.Lerp(originalRotation, neededRotation, t);
+                yield return null;
+            }
+
+            this.transform.rotation = neededRotation;
+            this.AnimationState = AnimationState.Idle;
         }
 
         /// <summary>

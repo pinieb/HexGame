@@ -83,7 +83,7 @@ namespace HexGame
         public override void MoveTo(CellCoordinate coord, Vector3 worldPosition)
         {
             this.LookAt(worldPosition);
-            base.MoveTo(coord, worldPosition);
+            base.MoveTo(coord, worldPosition);    
         }
 
         /// <summary>
@@ -96,13 +96,17 @@ namespace HexGame
             Quaternion healthBarRotation = this.HealthBarManager.transform.rotation;
 
             Vector3 lookPos = new Vector3(worldPosition.x, this.transform.position.y, worldPosition.z);
-            this.transform.LookAt(lookPos, Vector3.up);
 
             if (shouldSnap)
             {
+                this.transform.LookAt(lookPos, Vector3.up);
                 int snap = (60 * (((int)this.transform.eulerAngles.y) / 60)) + 30;
                 Quaternion rotation = Quaternion.Euler(0f, snap, 0f);
                 this.transform.rotation = rotation;
+            }
+            else
+            {
+                this.StartCoroutine(this.TurnToFace(lookPos));
             }
 
             this.HealthBarManager.transform.rotation = healthBarRotation;
@@ -115,9 +119,11 @@ namespace HexGame
         protected override void Attack(Unit unit)
         {
             GameLogger.Instance.AddMove(ActionRecord.AttackAction(this, this.Coordinate, unit, unit.Coordinate));
-
             this.LookAt(unit.transform.position);
+
+            this.AnimationState = AnimationState.Attack;
             var bullet = (GameObject)Instantiate(this.Bullet);
+
             bullet.transform.position = this.BulletSpawn.transform.position;
             this.StartCoroutine(bullet.GetComponent<BulletController>().SendTo(
                 unit.transform.position, 
