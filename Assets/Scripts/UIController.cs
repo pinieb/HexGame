@@ -39,8 +39,14 @@ namespace HexGame
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
         public GameObject InstructionPanePrefab;
 
+        /// <summary>
+        /// Instructions pane instance
+        /// </summary>
         private GameObject instructionsPane;
 
+        /// <summary>
+        /// Update the GUI on each frame
+        /// </summary>
         public void Update()
         {
             if (this.instructionsPane != null && Input.anyKey)
