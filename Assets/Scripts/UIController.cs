@@ -34,6 +34,12 @@ namespace HexGame
         public GUISkin Skin;
 
         /// <summary>
+        /// Instruction pane
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public GameObject InstructionPane;
+
+        /// <summary>
         /// Handles GUI events
         /// </summary>
         public void OnGUI()

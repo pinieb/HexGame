@@ -22,6 +22,18 @@ namespace HexGame
         public int MaxNumberOfAttacks;
 
         /// <summary>
+        /// Bullet prefab
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public GameObject Bullet;
+
+        /// <summary>
+        /// Bullet spawn location
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public GameObject BulletSpawn;
+
+        /// <summary>
         /// Attacks used this turn
         /// </summary>
         private int attacksUsedThisTurn = 0;
@@ -102,8 +114,18 @@ namespace HexGame
         /// <param name="unit">Unit to attack</param>
         protected override void Attack(Unit unit)
         {
-            base.Attack(unit);
+            GameLogger.Instance.AddMove(ActionRecord.AttackAction(this, this.Coordinate, unit, unit.Coordinate));
+
             this.LookAt(unit.transform.position);
+            var bullet = (GameObject)Instantiate(this.Bullet);
+            bullet.transform.position = this.BulletSpawn.transform.position;
+            this.StartCoroutine(bullet.GetComponent<BulletController>().SendTo(
+                unit.transform.position, 
+                () => 
+                { 
+                    this.AnimationState = AnimationState.Idle;
+                    unit.Health -= this.AttackPower;
+                }));
         }
     }
 }

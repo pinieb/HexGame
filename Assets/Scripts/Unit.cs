@@ -176,12 +176,12 @@ namespace HexGame
         }
 
         /// <summary>
-        /// Gets a value indicating whether or not the unit is moving
+        /// Gets or sets the animation state
         /// </summary>
-        public bool IsMoving
+        public AnimationState AnimationState
         {
             get;
-            private set;
+            protected set;
         }
 
         /// <summary>
@@ -260,7 +260,7 @@ namespace HexGame
         {
             GameLogger.Instance.AddMove(ActionRecord.MoveAction(this, this.Coordinate, coord));
             this.Coordinate = coord;
-            this.IsMoving = true;
+            this.AnimationState = AnimationState.Move;
             this.targetPosition = worldPosition;
         }
 
@@ -269,11 +269,11 @@ namespace HexGame
         /// </summary>
         public void Update()
         {
-            if (this.IsMoving)
+            if (this.AnimationState == AnimationState.Move)
             {
                 if (this.transform.position == this.targetPosition)
                 {
-                    this.IsMoving = false;
+                    this.AnimationState = AnimationState.Idle;
                 }
                 else
                 {
@@ -281,30 +281,9 @@ namespace HexGame
                     this.transform.position = Vector3.MoveTowards(this.transform.position, this.targetPosition, step);
                 }
             }
-
-            if (this.Mesh.transform.position.y == this.FloatAnimationMaxHeight && this.ascending)
+            else if (this.AnimationState == AnimationState.Idle)
             {
-                this.ascending = false;
-            }
-            else if (this.Mesh.transform.position.y == this.FloatAnimationMinHeight && !this.ascending)
-            {
-                this.ascending = true;
-            }
-
-            float animationStep = this.FloatAnimationSpeed * Time.deltaTime;
-            if (this.ascending)
-            {
-                this.Mesh.transform.position = Vector3.MoveTowards(
-                    this.Mesh.transform.position, 
-                    new Vector3(this.Mesh.transform.position.x, this.FloatAnimationMaxHeight, this.Mesh.transform.position.z), 
-                    animationStep);
-            }
-            else 
-            {
-                this.Mesh.transform.position = Vector3.MoveTowards(
-                    this.Mesh.transform.position, 
-                    new Vector3(this.Mesh.transform.position.x, this.FloatAnimationMinHeight, this.Mesh.transform.position.z), 
-                    animationStep);
+                this.IdleBob();
             }
         }
 
@@ -381,6 +360,37 @@ namespace HexGame
         {
             GameLogger.Instance.AddMove(ActionRecord.AttackAction(this, this.Coordinate, unit, unit.Coordinate));
             unit.Health -= this.AttackPower;
+        }
+
+        /// <summary>
+        /// Bobs the unit while idle
+        /// </summary>
+        private void IdleBob()
+        {
+            if (this.Mesh.transform.position.y == this.FloatAnimationMaxHeight && this.ascending)
+            {
+                this.ascending = false;
+            }
+            else if (this.Mesh.transform.position.y == this.FloatAnimationMinHeight && !this.ascending)
+            {
+                this.ascending = true;
+            }
+
+            float animationStep = this.FloatAnimationSpeed * Time.deltaTime;
+            if (this.ascending)
+            {
+                this.Mesh.transform.position = Vector3.MoveTowards(
+                    this.Mesh.transform.position,
+                    new Vector3(this.Mesh.transform.position.x, this.FloatAnimationMaxHeight, this.Mesh.transform.position.z),
+                    animationStep);
+            }
+            else
+            {
+                this.Mesh.transform.position = Vector3.MoveTowards(
+                    this.Mesh.transform.position,
+                    new Vector3(this.Mesh.transform.position.x, this.FloatAnimationMinHeight, this.Mesh.transform.position.z),
+                    animationStep);
+            }
         }
     }
 }

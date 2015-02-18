@@ -269,7 +269,7 @@ using UnityEngine;
         /// <param name="unit">Unit to select</param>
         public void ProcessSelection(Unit unit)
         {
-            if (unit != null)
+            if (unit != null && unit.AnimationState == AnimationState.Idle)
             {
                 if (this.selection == null && this.TurnController.PlayerToMove == unit.Owner)
                 {
@@ -297,7 +297,7 @@ using UnityEngine;
                         this.HighlightCells(cellsToHighlightForHeal, CellHighlightMode.Heal);
                     }
                 }
-                else if (this.selection != null && this.selection != unit)
+                else if (this.selection != null && this.selection != unit && this.selection.AnimationState == AnimationState.Idle)
                 {
                     Unit tempSelection = this.selection;
                     if (this.selection.ActOn(unit))
@@ -591,7 +591,7 @@ using UnityEngine;
         /// <returns>Does not return anything</returns>
         private IEnumerator WaitForActionToComplete(Unit unit)
         {
-            while (unit.IsMoving)
+            while (unit.AnimationState != AnimationState.Idle)
             {
                 yield return null;
             }

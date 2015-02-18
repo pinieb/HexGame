@@ -8,6 +8,7 @@
 namespace HexGame
 {
     using System.Diagnostics.CodeAnalysis;
+    using UnityEngine;
 
     /// <summary>
     /// Pyramid controller
@@ -25,6 +26,18 @@ namespace HexGame
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
         public int HealPower;
+
+        /// <summary>
+        /// Heal particles
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public ParticleSystem HealParticles;
+
+        /// <summary>
+        /// Heal target particles
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
+        public ParticleSystem HealTargetParticles;
 
         /// <summary>
         /// Start the controller
@@ -80,7 +93,17 @@ namespace HexGame
         protected void Heal(Unit unit)
         {
             GameLogger.Instance.AddMove(ActionRecord.HealAction(this, this.Coordinate, unit, unit.Coordinate));
+
+            this.AnimationState = AnimationState.Heal;
+            this.HealParticles.Play();
+
+            Vector3 particlePos = unit.transform.position;
+            particlePos.y += 3;
+            this.HealTargetParticles.transform.position = particlePos;
+            this.HealTargetParticles.Play();
+
             unit.Health += this.HealPower;
+            this.AnimationState = AnimationState.Idle;
         }
     }
 }
